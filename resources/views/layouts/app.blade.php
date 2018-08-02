@@ -37,9 +37,6 @@
                         <router-link to="/" tag="li">
                             <a class="nav-link">Tree</a>
                         </router-link>
-                        <router-link to="/tree" tag="li">
-                            <a class="nav-link"> Tree example</a>
-                        </router-link>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -25,7 +25,9 @@ class EmployeeController extends BaseController
      */
     public function root()
     {
-        $root = Employee::with('children.position', 'position')->whereNull('parent_id')->first();
+        $root = Employee::with('position')
+            ->whereNull('parent_id')
+            ->first();
 
         return $this->jsonResponse($root);
     }
@@ -40,7 +42,10 @@ class EmployeeController extends BaseController
     {
         $employee = Employee::with('children.position')->findOrFail($id);
 
-        return $this->jsonResponse($employee->children);
+        return $this->jsonResponse($employee->children->map(function($child){
+            $child->isLeaf = $child->isLeaf();
+            return $child;
+        }));
     }
 
     /**
@@ -75,6 +80,7 @@ class EmployeeController extends BaseController
         }
 
         $employee = $employee->findOrFail($employee_id);
+        $employee->isLeaf = $employee->isLeaf();
 
         return $this->jsonResponse($employee);
     }

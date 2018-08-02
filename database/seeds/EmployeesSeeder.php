@@ -58,7 +58,7 @@ class EmployeesSeeder extends Seeder
     {
         $chiefAccountantChildren = [];
 
-        for ($i = 1; $i <= 1000; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $chiefAccountantChildren[] = $this->getEmployeeAttributes('accountant', 20000);
         }
 
@@ -76,14 +76,14 @@ class EmployeesSeeder extends Seeder
     {
         $stewards = [];
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $stewardChildren = [];
 
-            for ($k = 1; $k <= 100; $k++) {
+            for ($k = 1; $k <= 20; $k++) {
                 $stewardChildren[] = $this->getEmployeeAttributes('cleaner', 5000);
             }
 
-            for ($j = 1; $j <= 50; $j++) {
+            for ($j = 1; $j <= 10; $j++) {
                 $stewardChildren[] = $this->getEmployeeAttributes('locksmith', 7000);
             }
 
@@ -100,7 +100,7 @@ class EmployeesSeeder extends Seeder
     {
         $developmentTeamManagerChildren = [];
 
-        for ($i = 1; $i <= 16; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
             $developmentTeamManagerChildren[] = $this->getEmployeeAttributes('junior_developer', 10000);
         }
 
@@ -120,7 +120,7 @@ class EmployeesSeeder extends Seeder
     {
         $engineerTeamManagerChildren = [];
 
-        for ($i = 1; $i <= 16; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
             $engineerTeamManagerChildren[] = $this->getEmployeeAttributes('junior_engineer', 10000);
         }
 
@@ -140,13 +140,13 @@ class EmployeesSeeder extends Seeder
     {
         $technicalDirectorChildren = [];
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $middleManagers = [];
 
-            for ($k = 1; $k <= 20; $k++) {
+            for ($k = 1; $k <= 5; $k++) {
                 $middleChildren = [];
 
-                for ($j = 1; $j <= 20; $j++) {
+                for ($j = 1; $j <= 5; $j++) {
                     $middleChildren[] = $this->buildEngineerTeam();
                     $middleChildren[] = $this->buildDevelopmentTeam();
                 }

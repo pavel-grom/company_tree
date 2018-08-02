@@ -1,59 +1,68 @@
 <template>
     <div class="container">
-        <div class="col-md-6">
-            <ul class="list-group">
-                <li class="list-group-item" v-for="employee in employees">
-                    {{ employee.full_name }}
-                    <ul v-if="employee.children" v-for="children in employee.children">
-                        <li>
-                            {{ children.full_name }}
-                            <button class="btn btn-link" v-if="employee.children" v-on:click="expand(children.id)">&darr;</button>
-                            <ul v-if="children.children" v-for="children in employee.children.children">
-                                <li>
-                                    {{ children.children.full_name }}
-                                    <button class="btn btn-link" v-if="employee.children.children" v-on:click="expand(children.children.id)">&darr;</button>
-
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="row">
+            <div class="col-8">
+                <v-jstree :data="asyncData" :async="loadData" allow-batch whole-row ref="tree" @item-click="itemClick" text-field-name="full_name"></v-jstree>
+            </div>
+            <div class="col-4 employee_info" v-if="employee">
+                <div class="employee_name">Name: <span>{{ employee.full_name }}</span></div>
+                <div class="employee_position">Position: <span>{{ employee.position.name }}</span></div>
+                <div class="employee_wage">Wage: <span></span>{{ employee.wage }}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        data: function () {
+        mounted() {
+
+        },
+        data: function (){
             return {
-                employees: []
+                data: [],
+                employee: null,
+                asyncData: [],
+                loadData: function (oriNode, resolve) {
+                    var app = this;
+                    let data = [];
+
+                    if (!app.employee) {
+                        axios.get('/api/employees/root')
+                            .then(function (res) {
+                                res.data.data.icon = 'fa fa-user';
+                                data = [res.data.data];
+                                app.employee = res.data.data;
+
+                                resolve(data);
+                            })
+                            .catch(function (res) {
+                                console.log(res);
+                                alert("Error on load.");
+                                resolve(data);
+                            });
+                    } else {
+                        axios.get('/api/employees/' + oriNode.data.id + '/children')
+                            .then(function (res) {
+                                for (var i = 0;i < res.data.data.length;i++) {
+                                    res.data.data[i].icon = 'fa fa-user';
+                                }
+                                data = res.data.data;
+
+                                resolve(data);
+                            })
+                            .catch(function (res) {
+                                console.log(res);
+                                alert("Error on load.");
+                                resolve(data);
+                            });
+                    }
+                },
             }
         },
-        mounted() {
-            var app = this;
-            axios.get('/api/employees/root')
-                .then(function (res) {
-                    app.employees.push(res.data.data);
-                })
-                .catch(function (res) {
-                    console.log(res);
-                    alert("Error on load general director.");
-                });
-        },
         methods: {
-            expand: function (id) {
-                var app = this;
-                axios.get('/api/employees/' + id + '/children')
-                    .then(function (res) {
-                        for (var i = 0; i <= res.data.data.length - 1; i++) {
-                            app.employees.push(res.data.data[i]);
-                        }
-                    })
-                    .catch(function (res) {
-                        console.log(res);
-                        alert("Error on load general director.");
-                    });
+            itemClick (node) {
+                this.employee = node.model;
             }
         }
     }

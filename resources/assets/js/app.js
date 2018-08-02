@@ -28,19 +28,11 @@ import VJstree from 'vue-jstree'
 window.Vue.use(VJstree);
 
 import TreeComponent from './components/TreeComponent.vue';
-import Tree1Component from './components/Tree1Component.vue';
-// import LiquorTreeComponent from './components/LiquorTreeComponent.vue';
-
-
 
 const routes = [
     {
         path: '/',
         component: TreeComponent
-    },
-    {
-        path: '/tree',
-        component: Tree1Component
     }
 ];
 
