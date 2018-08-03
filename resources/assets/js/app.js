@@ -1,41 +1,56 @@
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
+import VueAxios from 'vue-axios';
+import VJstree from 'vue-jstree';
+
+import LoginComponent from './components/LoginComponent.vue';
+import RegisterComponent from './components/RegisterComponent.vue';
+import TreeComponent from './components/TreeComponent.vue';
 
 window.Vue.use(VueRouter);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-// import LiquorTree from 'liquor-tree';
-
-
-
-import VJstree from 'vue-jstree'
-
+window.Vue.use(VueAxios, axios);
 window.Vue.use(VJstree);
 
-import TreeComponent from './components/TreeComponent.vue';
+// axios.defaults.baseURL = 'http://localhost:8000/api';
 
 const routes = [
     {
         path: '/',
+        name: 'tree',
         component: TreeComponent
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: RegisterComponent,
+        meta: {
+            auth: false
+        }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: LoginComponent,
+        meta: {
+            auth: false
+        }
     }
 ];
 
 const router = new VueRouter({ routes });
+
+window.Vue.router = router;
+
+window.Vue.use(require('@websanova/vue-auth'), {
+    auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
+    http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
+    router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
+    fetchData: {url: '/api/user', method: 'GET', enabled: true},
+    refreshData: {url: '/api/refresh'}
+});
 
 const app = new Vue({ router }).$mount('#app');

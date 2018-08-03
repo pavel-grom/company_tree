@@ -11,13 +11,15 @@
 |
 */
 
-Route::group([/*'middleware' => ['auth:api']*/], function(){
-    Route::get('employees/root', 'Api\EmployeeController@root');
-    Route::get('employees/{id}/children', 'Api\EmployeeController@children');
-    Route::resource('employees', 'Api\EmployeeController', ['except' => ['create', 'edit']]);
+Route::post('register', 'Api\AuthController@register');
+Route::post('login', 'Api\AuthController@login');
 
+Route::get('employees/root', 'Api\EmployeeController@root');
+Route::get('employees/{id}/children', 'Api\EmployeeController@children');
+Route::resource('employees', 'Api\EmployeeController', ['except' => ['create', 'edit']]);
+
+Route::group(['middleware' => ['auth:api']], function(){
+    Route::get('user', 'Api\AuthController@me');
+    Route::get('refresh', 'Api\AuthController@refresh');
+    Route::post('logout', 'Api\AuthController@logout');
 });
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
