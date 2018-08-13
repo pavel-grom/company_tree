@@ -27,7 +27,7 @@ class CreateEmployeeRequest extends FormRequest
             'full_name' => 'required|min:3|max:255',
             'photo' => 'image',
             'position_id' => 'required|integer|exists:positions',
-            'wage' => 'required|integer|min:1000',
+            'wage' => 'required|integer|min:1',
             'parent_id' => 'required|integer|exists:employees',
         ];
     }

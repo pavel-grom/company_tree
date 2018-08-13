@@ -34,11 +34,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        <router-link :to="{ name: 'tree' }" tag="li">
-                            <a class="nav-link">Tree</a>
-                        </router-link>
+                        <li v-if="$auth.check()" tag="li">
+                            <span class="nav-link">@{{ $auth.user().name }}</span>
+                        </li>
 
+                        <!-- Authentication Links -->
                         <router-link :to="{ name: 'register' }" v-if="!$auth.check()" tag="li">
                             <a class="nav-link">Register</a>
                         </router-link>

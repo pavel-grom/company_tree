@@ -5,29 +5,36 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\CreateEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
-use App\Models\Position;
+use App\Services\EmployeeService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class EmployeeController extends BaseController
 {
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @var EmployeeService
      */
-    public function index()
-    {
+    private $employeeService;
 
+    /**
+     * EmployeeController constructor.
+     * @param EmployeeService $employeeService
+     */
+    public function __construct(EmployeeService $employeeService)
+    {
+        $this->employeeService = $employeeService;
     }
 
     /**
-     * Get root employee
+     * Get root employees
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function root()
     {
         $root = Employee::with('position')
-            ->whereNull('parent_id')
-            ->first();
+            ->whereIsRoot('parent_id')
+            ->get();
 
         return $this->jsonResponse($root);
     }
@@ -53,11 +60,11 @@ class EmployeeController extends BaseController
      *
      * @param CreateEmployeeRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
      */
     public function store(CreateEmployeeRequest $request)
     {
-        $employee = Employee::create($request->except(['_lft', '_rgt', 'parent_id']));
-        $employee->parent()->associate($request->get('parent_id'))->save();
+        $employee = $this->employeeService->create($request);
 
         return $this->jsonResponse($employee);
     }
@@ -94,12 +101,7 @@ class EmployeeController extends BaseController
      */
     public function update(UpdateEmployeeRequest $request, $employee_id)
     {
-        $employee = Employee::findOrFail($employee_id);
-        $employee = $employee->update($request->except(['_lft', '_rgt', 'parent_id']));
-
-        if ($parent_id = $request->get('parent_id')) {
-            $employee->parent()->associate($parent_id)->save();
-        }
+        $employee = $this->employeeService->update($employee_id, $request);
 
         return $this->jsonResponse($employee);
     }

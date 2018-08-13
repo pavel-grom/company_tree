@@ -28,7 +28,7 @@ class UpdateEmployeeRequest extends FormRequest
             'full_name' => 'min:3|max:255',
             'photo' => 'image',
             'position_id' => 'integer|exists:positions',
-            'wage' => 'integer|min:1000',
+            'wage' => 'integer|min:1',
             'parent_id' => [
                 'integer',
                 'exists:employees',

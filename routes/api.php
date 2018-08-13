@@ -18,6 +18,8 @@ Route::get('employees/root', 'Api\EmployeeController@root');
 Route::get('employees/{id}/children', 'Api\EmployeeController@children');
 Route::resource('employees', 'Api\EmployeeController', ['except' => ['create', 'edit']]);
 
+Route::get('positions', 'Api\PositionController@all');
+
 Route::group(['middleware' => ['auth:api']], function(){
     Route::get('user', 'Api\AuthController@me');
     Route::get('refresh', 'Api\AuthController@refresh');
