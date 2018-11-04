@@ -23,6 +23,8 @@ class EmployeeController extends BaseController
     public function __construct(EmployeeService $employeeService)
     {
         $this->employeeService = $employeeService;
+
+        $this->middleware('auth:api', ['only' => ['store', 'update', 'destroy']]);
     }
 
     /**

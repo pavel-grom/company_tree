@@ -18,28 +18,28 @@
                 <div class="employee_wage">Wage: <span></span>{{ employee.wage }}</div>
             </div>
             <div class="col-4 employee_info" v-if="employee && $auth.check()">
-                <form>
+                <form @submit.prevent="employee_update">
                     <div class="form-group">
                         <label for="full_name">Full name</label>
-                        <input type="text" class="form-control" id="full_name" :value="employee.full_name">
+                        <input type="text" class="form-control" id="full_name" v-model="employee_edit.full_name">
                     </div>
                     <div class="form-group">
                         <label for="position_id">Position</label>
-                        <select class="form-control" id="position_id">
+                        <select class="form-control" id="position_id" v-model="employee_edit.position_id">
                             <option
                                     v-for="position in positions"
                                     :value="position.id"
-                                    :selected="employee.position_id === position.id"
+                                    :selected="employee_edit.position_id === position.id"
                             >
                                 {{ position.name }}
                             </option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="wage">Wage</label>
-                        <input type="number" class="form-control" id="wage" :value="employee.wage">
+                        <label for="wage" >Wage</label>
+                        <input type="number" class="form-control" id="wage" v-model="employee_edit.wage">
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
@@ -63,6 +63,7 @@
             return {
                 data: [],
                 employee: null,
+                employee_edit: null,
                 positions: [],
                 asyncData: [],
                 loadData: function (oriNode, resolve) {
@@ -107,6 +108,20 @@
         methods: {
             itemClick (node) {
                 this.employee = node.model;
+                this.employee_edit = Object.assign({}, node.model);
+
+            },
+            employee_update () {
+                var app = this;
+
+                axios.put('/api/employees/' + app.employee_edit.id, app.employee_edit)
+                    .then(function () {
+                        app.employee.full_name =  app.employee_edit.full_name;
+                    })
+                    .catch(function (res) {
+                        console.log(res);
+                        alert("Error on load.");
+                    });
             }
         }
     }

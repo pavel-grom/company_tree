@@ -50,7 +50,12 @@ window.Vue.use(require('@websanova/vue-auth'), {
     http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
     router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
     fetchData: {url: '/api/user', method: 'GET', enabled: true},
-    refreshData: {url: '/api/refresh'}
+    refreshData: {
+        url: '/api/refresh',
+        success: function (response) {
+            axios.defaults.headers.Authorization = 'Bearer ' + response.data.data.access_token;
+        }
+    }
 });
 
 const app = new Vue({ router }).$mount('#app');

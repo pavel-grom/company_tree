@@ -26,13 +26,14 @@ class UpdateEmployeeRequest extends FormRequest
     {
         return [
             'full_name' => 'min:3|max:255',
-            'photo' => 'image',
-            'position_id' => 'integer|exists:positions',
+            'photo' => 'nullable|image',
+            'position_id' => 'integer|exists:positions,id',
             'wage' => 'integer|min:1',
             'parent_id' => [
+                'nullable',
                 'integer',
-                'exists:employees',
-                new NotSelfParent($this->request->route('employee')),
+                'exists:employees,id',
+                new NotSelfParent($this->route('employee')),
             ],
         ];
     }

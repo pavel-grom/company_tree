@@ -25,10 +25,10 @@ class CreateEmployeeRequest extends FormRequest
     {
         return [
             'full_name' => 'required|min:3|max:255',
-            'photo' => 'image',
-            'position_id' => 'required|integer|exists:positions',
+            'photo' => 'nullable|image',
+            'position_id' => 'required|integer|exists:positions,id',
             'wage' => 'required|integer|min:1',
-            'parent_id' => 'required|integer|exists:employees',
+            'parent_id' => 'required|integer|exists:employees,id',
         ];
     }
 }

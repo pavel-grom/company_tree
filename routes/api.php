@@ -16,7 +16,7 @@ Route::post('login', 'Api\AuthController@login');
 
 Route::get('employees/root', 'Api\EmployeeController@root');
 Route::get('employees/{id}/children', 'Api\EmployeeController@children');
-Route::resource('employees', 'Api\EmployeeController', ['except' => ['create', 'edit']]);
+Route::apiResource('employees', 'Api\EmployeeController');
 
 Route::get('positions', 'Api\PositionController@all');
 

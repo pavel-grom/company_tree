@@ -36,8 +36,13 @@
                         email: app.email,
                         password: app.password
                     },
-                    success: function () {},
-                    error: function () {},
+                    success: function(response) {
+                        this.error = false;
+                        axios.defaults.headers.Authorization = 'Bearer ' + response.data.data.access_token;
+                    },
+                    error: function () {
+                        this.error = true;
+                    },
                     rememberMe: true,
                     redirect: '/'
 //                    ,

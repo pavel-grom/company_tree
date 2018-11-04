@@ -27,7 +27,7 @@ class EmployeeService
             return $parent->children()->create($request->all());
         }
 
-        return Employee::create($request->all());
+        return Employee::create($request->validated());
     }
 
     /**
@@ -37,6 +37,9 @@ class EmployeeService
      */
     public function update(int $employeeId, UpdateEmployeeRequest $request) : Employee
     {
-        return Employee::find($employeeId)->update($request->all());
+        $employee = Employee::findOrFail($employeeId);
+        $employee->update($request->validated());
+
+        return $employee;
     }
 }
