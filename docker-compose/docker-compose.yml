@@ -12,9 +12,9 @@ services:
             - "443:443"
 
         volumes:
-            - /projects/company-tree/docker-compose/nginx/config:/etc/nginx/conf.d
-            - /projects/company-tree/docker-compose/nginx/logs:/var/log/nginx/
-            - /projects/company-tree:/var/www/company-tree
+            - ./nginx/config:/etc/nginx/conf.d
+            - ./nginx/logs:/var/log/nginx/
+            - ../:/var/www/company-tree
 
         links:
             - php
@@ -34,7 +34,7 @@ services:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
 
         volumes:
-            - /projects/company-tree/docker-compose/mysql:/var/lib/mysql
+            - ./mysql:/var/lib/mysql
 
         command: "--innodb_use_native_aio=0"
 
@@ -45,7 +45,7 @@ services:
         container_name: php-fpm
 
         volumes:
-            - /projects/company-tree:/var/www/company-tree
+            - ../:/var/www/company-tree
 
         links:
             - mysql
